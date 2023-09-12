@@ -8,9 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.tonyk.android.homeworkfragments.R
 import com.tonyk.android.homeworkfragments.viewmodel.ContactsViewModel
 import com.tonyk.android.homeworkfragments.databinding.FragmentDetailsBinding
 import com.tonyk.android.homeworkfragments.model.Contact
@@ -63,10 +63,10 @@ class DetailsFragment : Fragment() {
                 val editedPhoneNumber = binding.contactPhone.text.toString()
                 contactsViewModel.updateContacts(contact.id, editedName,editedSurname, editedPhoneNumber)
             }
-            parentFragmentManager.popBackStack()
+            closeFragment()
         }
         binding.closeButton.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            closeFragment()
         }
     }
 
@@ -74,4 +74,18 @@ class DetailsFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    private fun closeFragment() {
+        if (resources.configuration.screenWidthDp >= 600) {
+            val existingDetailsFragment =
+                parentFragmentManager.findFragmentById(R.id.detailsFragmentContainer)
+            if (existingDetailsFragment != null) {
+                parentFragmentManager.beginTransaction()
+                    .remove(existingDetailsFragment)
+                    .commit()
+            }
+        }
+        else parentFragmentManager.popBackStack()
+    }   // На планшетах просто удаляю фрагмент из контейнера (который положил без стека), а на телефонах из бекстека.
+        // Изначально я сделал стек и для планшета, но так как-то поприятнее поведение мне кажется. Заодно попрактиковался с remove фрагментом в FragmentManager.
 }

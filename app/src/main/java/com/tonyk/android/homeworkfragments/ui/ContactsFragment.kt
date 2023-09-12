@@ -18,7 +18,6 @@ import kotlinx.coroutines.launch
 class ContactsFragment : Fragment() {
     private var _binding: FragmentContactsBinding? = null
     private val binding get() = _binding!!
-
     private val contactsViewModel: ContactsViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -39,10 +38,10 @@ class ContactsFragment : Fragment() {
             detailsFragment.arguments = args
             if (resources.configuration.screenWidthDp >= 600) {
                 parentFragmentManager.beginTransaction()
-                    .add(R.id.detailsFragmentContainer, detailsFragment)
-                    .addToBackStack(null)
+                    .replace(R.id.detailsFragmentContainer, detailsFragment)
                     .commit()
-             }
+             }  // Для планшета добавлять в бекстек не стал. Чтобы рядом отображалось только окно нажатое последний раз.
+                // С постоянно открытым списком контактов можно было бы нагрузить большой стек детелей, если их не закрывать, что мне не понравилось. Легко изменить, если что.
             else {
                 parentFragmentManager.beginTransaction()
                     .replace(R.id.fragmentContainer, detailsFragment)
@@ -57,7 +56,6 @@ class ContactsFragment : Fragment() {
                 }
             }
         }
-
         binding.contactsRcv.layoutManager = LinearLayoutManager(context)
         binding.contactsRcv.adapter = adapter
     }

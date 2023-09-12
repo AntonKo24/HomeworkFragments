@@ -8,7 +8,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(if (resources.configuration.screenWidthDp >= 600) R.layout.activity_main_tablet else R.layout.activity_main)
     }
-
 }
 
 
