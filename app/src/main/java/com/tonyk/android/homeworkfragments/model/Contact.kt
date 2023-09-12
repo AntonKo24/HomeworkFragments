@@ -5,9 +5,9 @@ import kotlinx.parcelize.Parcelize
 import java.util.UUID
 
 @Parcelize
-data class Contact (
+data class Contact(
     val id: UUID,
     val name: String,
-    val surname : String,
-    val phoneNumber : String
+    val surname: String,
+    val phoneNumber: String
 ) : Parcelable

@@ -12,7 +12,12 @@ class ContactsViewModel : ViewModel() {
     private val _contactsList = MutableStateFlow(ContactsData.contactList)
     val contactsList: StateFlow<List<Contact>> = _contactsList
 
-    fun updateContacts(id: UUID, editedName: String, editedSurname: String, editedPhoneNumber: String) {
+    fun updateContacts(
+        id: UUID,
+        editedName: String,
+        editedSurname: String,
+        editedPhoneNumber: String
+    ) {
         _contactsList.value = _contactsList.value.map { contact ->
             if (contact.id == id) {
                 contact.copy(

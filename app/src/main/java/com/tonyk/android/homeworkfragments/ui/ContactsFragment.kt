@@ -10,9 +10,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.tonyk.android.homeworkfragments.viewmodel.ContactsViewModel
 import com.tonyk.android.homeworkfragments.R
 import com.tonyk.android.homeworkfragments.databinding.FragmentContactsBinding
+import com.tonyk.android.homeworkfragments.viewmodel.ContactsViewModel
 import kotlinx.coroutines.launch
 
 class ContactsFragment : Fragment() {
@@ -26,8 +26,9 @@ class ContactsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentContactsBinding.inflate(inflater, container, false)
-        return  binding.root
+        return binding.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -40,8 +41,8 @@ class ContactsFragment : Fragment() {
                 parentFragmentManager.beginTransaction()
                     .replace(R.id.detailsFragmentContainer, detailsFragment)
                     .commit()
-             }  // Для планшета добавлять в бекстек не стал. Чтобы рядом отображалось только окно нажатое последний раз.
-                // С постоянно открытым списком контактов можно было бы нагрузить большой стек детелей, если их не закрывать, что мне не понравилось. Легко изменить, если что.
+            }  // Для планшета добавлять в бекстек не стал. Чтобы рядом отображалось только окно нажатое последний раз.
+            // С постоянно открытым списком контактов можно было бы нагрузить большой стек детелей, если их не закрывать, что мне не понравилось. Легко изменить, если что.
             else {
                 parentFragmentManager.beginTransaction()
                     .replace(R.id.fragmentContainer, detailsFragment)
@@ -51,7 +52,7 @@ class ContactsFragment : Fragment() {
         }
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                contactsViewModel.contactsList.collect{
+                contactsViewModel.contactsList.collect {
                     adapter.submitList(it)
                 }
             }
@@ -59,6 +60,7 @@ class ContactsFragment : Fragment() {
         binding.contactsRcv.layoutManager = LinearLayoutManager(context)
         binding.contactsRcv.adapter = adapter
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

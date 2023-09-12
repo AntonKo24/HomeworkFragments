@@ -11,10 +11,9 @@ import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.tonyk.android.homeworkfragments.R
-import com.tonyk.android.homeworkfragments.viewmodel.ContactsViewModel
 import com.tonyk.android.homeworkfragments.databinding.FragmentDetailsBinding
 import com.tonyk.android.homeworkfragments.model.Contact
-
+import com.tonyk.android.homeworkfragments.viewmodel.ContactsViewModel
 
 
 class DetailsFragment : Fragment() {
@@ -47,7 +46,8 @@ class DetailsFragment : Fragment() {
                 contactPhone.setText(contact.phoneNumber)
                 contactPhone.setOnEditorActionListener { _, actionId, _ ->
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        val imm =
+                            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                         imm.hideSoftInputFromWindow(binding.contactPhone.windowToken, 0)
                         return@setOnEditorActionListener true
                     }
@@ -61,7 +61,12 @@ class DetailsFragment : Fragment() {
                 val editedName = binding.contactName.text.toString()
                 val editedSurname = binding.contactSurname.text.toString()
                 val editedPhoneNumber = binding.contactPhone.text.toString()
-                contactsViewModel.updateContacts(contact.id, editedName,editedSurname, editedPhoneNumber)
+                contactsViewModel.updateContacts(
+                    contact.id,
+                    editedName,
+                    editedSurname,
+                    editedPhoneNumber
+                )
             }
             closeFragment()
         }
@@ -84,8 +89,7 @@ class DetailsFragment : Fragment() {
                     .remove(existingDetailsFragment)
                     .commit()
             }
-        }
-        else parentFragmentManager.popBackStack()
+        } else parentFragmentManager.popBackStack()
     }   // На планшетах просто удаляю фрагмент из контейнера (который положил без стека), а на телефонах из бекстека.
-        // Изначально я сделал стек и для планшета, но так как-то поприятнее поведение мне кажется. Заодно попрактиковался с remove фрагментом в FragmentManager.
+    // Изначально я сделал стек и для планшета, но так как-то поприятнее поведение мне кажется. Заодно попрактиковался с remove фрагментом в FragmentManager.
 }
