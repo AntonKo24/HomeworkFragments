@@ -12,6 +12,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tonyk.android.homeworkfragments.R
 import com.tonyk.android.homeworkfragments.databinding.FragmentContactsBinding
+import com.tonyk.android.homeworkfragments.util.DeviceChecker
 import com.tonyk.android.homeworkfragments.viewmodel.ContactsViewModel
 import kotlinx.coroutines.launch
 
@@ -37,7 +38,7 @@ class ContactsFragment : Fragment() {
             val args = Bundle()
             args.putParcelable("contact", contact)
             detailsFragment.arguments = args
-            if (resources.configuration.screenWidthDp >= 600) {
+            if (DeviceChecker.isTablet(requireContext())) {
                 parentFragmentManager.beginTransaction()
                     .replace(R.id.detailsFragmentContainer, detailsFragment)
                     .commit()

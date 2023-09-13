@@ -13,6 +13,7 @@ import androidx.fragment.app.activityViewModels
 import com.tonyk.android.homeworkfragments.R
 import com.tonyk.android.homeworkfragments.databinding.FragmentDetailsBinding
 import com.tonyk.android.homeworkfragments.model.Contact
+import com.tonyk.android.homeworkfragments.util.DeviceChecker
 import com.tonyk.android.homeworkfragments.viewmodel.ContactsViewModel
 
 
@@ -81,7 +82,7 @@ class DetailsFragment : Fragment() {
     }
 
     private fun closeFragment() {
-        if (resources.configuration.screenWidthDp >= 600) {
+        if (DeviceChecker.isTablet(requireContext())) {
             val existingDetailsFragment =
                 parentFragmentManager.findFragmentById(R.id.detailsFragmentContainer)
             if (existingDetailsFragment != null) {
