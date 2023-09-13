@@ -18,17 +18,20 @@ class ContactsViewModel : ViewModel() {
         editedSurname: String,
         editedPhoneNumber: String
     ) {
-        _contactsList.value = _contactsList.value.map { contact ->
-            if (contact.id == id) {
-                contact.copy(
-                    name = editedName,
-                    surname = editedSurname,
-                    phoneNumber = editedPhoneNumber
-                )
-            } else {
-                contact
-            }
+        val updatedContacts = _contactsList.value.toMutableList()
+
+        val index = updatedContacts.indexOfFirst { it.id == id }
+        if (index != -1) {
+            updatedContacts[index] = updatedContacts[index].copy(
+                name = editedName,
+                surname = editedSurname,
+                phoneNumber = editedPhoneNumber
+            )
+            _contactsList.value = updatedContacts
         }
     }
+    fun deleteContact(contactId: UUID) {
+        _contactsList.value = _contactsList.value.filter { it.id != contactId }.toMutableList()
+    }
 }
-// Можно было бы из без вьюмодели сделать, но она совсем небольшая и с помощью StateFlow легко следить за изменениями в списке.
+

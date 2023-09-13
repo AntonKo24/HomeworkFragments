@@ -5,26 +5,37 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.tonyk.android.homeworkfragments.databinding.ContactItemBinding
 import com.tonyk.android.homeworkfragments.model.Contact
 
 class ContactHolder(
     private val binding: ContactItemBinding
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(contact: Contact, onContactClicked: (contact: Contact) -> Unit) {
+    fun bind(
+        contact: Contact,
+        onContactClicked: (contact: Contact) -> Unit,
+        onContactLongClicked: (contact: Contact) -> Unit
+    ) {
         binding.apply {
             nameTxt.text = contact.name
             surnameTxt.text = contact.surname
             phoneNumberTxt.text = contact.phoneNumber
+            photoImage.load("https://picsum.photos/200/300?random=${contact.photo}")
             root.setOnClickListener {
                 onContactClicked(contact)
+            }
+            root.setOnLongClickListener {
+                onContactLongClicked(contact)
+                return@setOnLongClickListener true
             }
         }
     }
 }
 
 class ContactsListAdapter(
-    private val onContactClicked: (contact: Contact) -> Unit
+    private val onContactClicked: (contact: Contact) -> Unit,
+    private val onContactLongClicked: (contact: Contact) -> Unit
 ) : ListAdapter<Contact, ContactHolder>(ContactDiffCallback()) {
 
     override fun onCreateViewHolder(
@@ -37,7 +48,7 @@ class ContactsListAdapter(
 
     override fun onBindViewHolder(holder: ContactHolder, position: Int) {
         val contact = getItem(position)
-        holder.bind(contact, onContactClicked)
+        holder.bind(contact, onContactClicked, onContactLongClicked)
     }
 }
 

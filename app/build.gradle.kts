@@ -51,4 +51,5 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation ("androidx.activity:activity-ktx:1.7.2")
     implementation ("androidx.fragment:fragment-ktx:1.6.1")
+    implementation("io.coil-kt:coil:2.4.0")
 }

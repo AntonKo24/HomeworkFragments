@@ -8,8 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import coil.load
 import com.tonyk.android.homeworkfragments.R
 import com.tonyk.android.homeworkfragments.databinding.FragmentDetailsBinding
 import com.tonyk.android.homeworkfragments.model.Contact
@@ -40,36 +42,12 @@ class DetailsFragment : Fragment() {
             arguments?.getParcelable("contact") as Contact?
         }
 
-        if (contact != null) {
-            binding.apply {
-                contactName.setText(contact.name)
-                contactSurname.setText(contact.surname)
-                contactPhone.setText(contact.phoneNumber)
-                contactPhone.setOnEditorActionListener { _, actionId, _ ->
-                    if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        val imm =
-                            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                        imm.hideSoftInputFromWindow(binding.contactPhone.windowToken, 0)
-                        return@setOnEditorActionListener true
-                    }
-                    false
-                } // Немного изменил поведение после ввода номера телефона. Чтобы пропадала клавиатура и фокус не прыгал вниз.
-            }
-        }
+        contact?.let { setupUI(it) }
 
         binding.saveButton.setOnClickListener {
             if (contact != null) {
-                val editedName = binding.contactName.text.toString()
-                val editedSurname = binding.contactSurname.text.toString()
-                val editedPhoneNumber = binding.contactPhone.text.toString()
-                contactsViewModel.updateContacts(
-                    contact.id,
-                    editedName,
-                    editedSurname,
-                    editedPhoneNumber
-                )
+                saveChanges(contact)
             }
-            closeFragment()
         }
         binding.closeButton.setOnClickListener {
             closeFragment()
@@ -79,6 +57,28 @@ class DetailsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun setupUI(contact: Contact) {
+        binding.apply {
+            contactName.setText(contact.name)
+            contactSurname.setText(contact.surname)
+            contactPhoto.load("https://picsum.photos/200/300?random=${contact.photo}")
+            contactPhone.setText(contact.phoneNumber)
+            contactPhone.setOnEditorActionListener { _, actionId, _ ->
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    hideKeyboard()
+                    return@setOnEditorActionListener true
+                }
+                false
+            }
+        }
+    }
+
+    private fun hideKeyboard() {
+        val imm =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(binding.contactPhone.windowToken, 0)
     }
 
     private fun closeFragment() {
@@ -91,6 +91,23 @@ class DetailsFragment : Fragment() {
                     .commit()
             }
         } else parentFragmentManager.popBackStack()
-    }   // На планшетах просто удаляю фрагмент из контейнера (который положил без стека), а на телефонах из бекстека.
+    }
+    // На планшетах просто удаляю фрагмент из контейнера (который положил без стека), а на телефонах из бекстека.
     // Изначально я сделал стек и для планшета, но так как-то поприятнее поведение мне кажется. Заодно попрактиковался с remove фрагментом в FragmentManager.
+
+    private fun saveChanges(contact: Contact) {
+        val editedName = binding.contactName.text.toString()
+        val editedSurname = binding.contactSurname.text.toString()
+        val editedPhoneNumber = binding.contactPhone.text.toString()
+        contactsViewModel.updateContacts(
+            contact.id,
+            editedName,
+            editedSurname,
+            editedPhoneNumber
+        )
+        closeFragment()
+        Toast.makeText(context, "Contact changes saved!", Toast.LENGTH_SHORT).show()
+    }
+
+
 }
