@@ -59,6 +59,7 @@ class ContactsFragment : Fragment() {
                 }
             },
             onContactLongClicked = { contact -> showDeleteConfirmationDialog(contact) })
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 contactsViewModel.contactsList.collect {
@@ -73,7 +74,7 @@ class ContactsFragment : Fragment() {
             contactsRcv.adapter = adapter
             contactsRcv.addItemDecoration(ContactsListDecorationItem(requireContext()))
 
-            binding.searchContact.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            searchContact.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     query?.let { performSearch(it, adapter) }
                     return true

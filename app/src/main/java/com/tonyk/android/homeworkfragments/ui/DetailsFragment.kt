@@ -67,18 +67,15 @@ class DetailsFragment : Fragment() {
             contactPhone.setText(contact.phoneNumber)
             contactPhone.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    hideKeyboard()
+                    val imm =
+                        requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(binding.contactPhone.windowToken, 0)
                     return@setOnEditorActionListener true
                 }
                 false
             }
+            // Изменил немного поведение после ввода номера телефона. Чтобы пропадала клава и фокус не падал вниз. Так кажется более юзер френдли. Можно и убрать.
         }
-    }
-
-    private fun hideKeyboard() {
-        val imm =
-            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(binding.contactPhone.windowToken, 0)
     }
 
     private fun closeFragment() {
@@ -108,6 +105,4 @@ class DetailsFragment : Fragment() {
         closeFragment()
         Toast.makeText(context, "Contact changes saved!", Toast.LENGTH_SHORT).show()
     }
-
-
 }

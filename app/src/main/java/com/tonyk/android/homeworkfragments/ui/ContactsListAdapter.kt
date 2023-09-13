@@ -9,7 +9,7 @@ import coil.load
 import com.tonyk.android.homeworkfragments.databinding.ContactItemBinding
 import com.tonyk.android.homeworkfragments.model.Contact
 
-class ContactHolder(
+class ContactViewHolder(
     private val binding: ContactItemBinding
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(
@@ -36,17 +36,17 @@ class ContactHolder(
 class ContactsListAdapter(
     private val onContactClicked: (contact: Contact) -> Unit,
     private val onContactLongClicked: (contact: Contact) -> Unit
-) : ListAdapter<Contact, ContactHolder>(ContactDiffCallback()) {
+) : ListAdapter<Contact, ContactViewHolder>(ContactDiffCallback()) {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): ContactHolder {
+    ): ContactViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return ContactHolder(ContactItemBinding.inflate(inflater, parent, false))
+        return ContactViewHolder(ContactItemBinding.inflate(inflater, parent, false))
     }
 
-    override fun onBindViewHolder(holder: ContactHolder, position: Int) {
+    override fun onBindViewHolder(holder: ContactViewHolder, position: Int) {
         val contact = getItem(position)
         holder.bind(contact, onContactClicked, onContactLongClicked)
     }
@@ -61,6 +61,3 @@ class ContactDiffCallback : DiffUtil.ItemCallback<Contact>() {
         return oldItem == newItem
     }
 }
-
-
-

@@ -34,4 +34,3 @@ class ContactsViewModel : ViewModel() {
         _contactsList.value = _contactsList.value.filter { it.id != contactId }.toMutableList()
     }
 }
-

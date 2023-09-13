@@ -10,5 +10,3 @@ class MainActivity : AppCompatActivity() {
         setContentView(if (DeviceChecker.isTablet(this)) R.layout.activity_main_tablet else R.layout.activity_main)
     }
 }
-
-
